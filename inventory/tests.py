@@ -2,13 +2,6 @@ from django.test import TestCase
 from inventory.models import Item
 
 # Create your tests here.
-def calculate_quantity_level(item):
-    thresholds = [ 0.1, 0.25, 1.0 ]
-    percent    = item.quantity / item.max_quantity
-
-    for t in range(len(thresholds)):
-        if percent < thresholds[t]: return t
-
 class InventoryTests(TestCase):
     def test_item_quantity_levels(self):
         item = Item( name         = "CUSTOM_ITEM",
@@ -22,5 +15,4 @@ class InventoryTests(TestCase):
 
         for test in test_values:
             item.quantity = item.max_quantity * test[0]
-            qty_level     = calculate_quantity_level(item)
-            self.assertEqual(qty_level, test[1])
+            self.assertEqual(item.calc_quantity_level(), test[1])
